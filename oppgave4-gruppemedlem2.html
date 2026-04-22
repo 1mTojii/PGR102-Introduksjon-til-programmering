@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 4 - Gruppemedlem 2</title>
+    <!-- LØSES BARE HVIS MAN HAR JOBBET 2 ELLER 3 SAMMEN -->
+</head>
+<body>
+    <h1> Førstemann til palmtreet!!!!</h1>
+    
+    <input type="button" id="start-btn" value="Start">
+    <input type="button" id="stop-btn" value="Stopp">
+    <input type="button" id="speed-2s-btn" value="hastighet 2s">
+    <input type="button" id="speed-3s-btn" value="hastighet 3s">
+    <img id="blue-car" src="images/blue-car.png">
+    <img id="red-car" src="images/red-car.png">
+    <img id="palm" src="images/palm.jpg">
+    <div id="output-div"></div>
+
+    <script>
+        const blueCar = document.getElementById('blue-car');
+        const redCar = document.getElementById('red-car');
+        const outputDiv = document.getElementById('output-div');
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById("stop-btn");
+        const speed2sBtn = document.getElementById('speed-2s-btn'); 
+        const speed3sBtn = document.getElementById('speed-3s-btn');
+
+        let blueCarLength = 0;
+        let redCarLength = 0;
+
+        //startverdien for intervllets hastighet
+        let iShowSpeed = 1000;
+
+        //brukes for å kontrollere setInterval
+        let raceInterval;
+
+        startBtn.onclick = startInterval;
+        stopBtn.onclick = stopInterval;
+
+        //setter forksjellige alternativer for hastigheter
+        speed2sBtn.onclick = function(){
+            setSpeed(2000);
+        };
+        speed3sBtn.onclick = function(){
+            setSpeed(3000);
+        };
+
+        function setSpeed(speed) {
+            //oppdatere hastighetsverdien
+            iShowSpeed = speed;
+            //stopper den aktive intervallet for bilene 
+            clearInterval(raceInterval);
+            //starter den nye intervallen for bilene 
+            raceInterval = setInterval(startRace, iShowSpeed);
+            startBtn.style.display = "none";
+        };
+
+        //funksjonen stopper racet ved å fjerne intervallet
+        function stopInterval() {
+            clearInterval(raceInterval);
+            startBtn.style.display = "inline";
+        };
+
+        //funksjonen starter racet med den satte hastigheten 
+        function startInterval() {
+            raceInterval = setInterval(startRace, iShowSpeed);
+            startBtn.style.display = "none";
+        };
+
+        //funksjonen danner et tilfeldig avstand mellom 0 og 200px
+        function randomCarLength() {
+            return Math.floor(Math.random() * 201);
+        };
+
+        // flytter bilene fremover og sjekker status
+        function startRace() {
+            blueCarLength += randomCarLength();
+            redCarLength += randomCarLength();
+            blueCar.style.left = blueCarLength + "px";
+            redCar.style.left = redCarLength + "px";
+            checkGameStatus(); //status sjekken 
+        };
+
+        //funksjonen sjekker om en av bilene ar nådd palmtreet
+        function checkGameStatus() {
+            if (blueCarLength >= 700) {
+                outputDiv.textContent = "Blå bil har vunnet";
+                outputDiv.style.color = "blue";
+                clearInterval(raceInterval);
+            } else if (redCarLength >= 700) {
+                outputDiv.textContent = "Rød bil har vunnet";
+                outputDiv.style.color = "red";
+                clearInterval(raceInterval);
+            }
+        };
+    </script>
+</body>
+</html>
+    <style>
+    body{
+        margin: 0;
+        font-family: sans-serif;
+        text-align: center;
+        background-color: rgb(122, 192, 230);
+    }
+    img{
+        position: absolute;
+        left: 0px;
+        transition: all 3s;
+    }
+    #blue-car{
+        top: 100px;
+    }
+    #red-car{
+        top: 200px;
+    }
+    #start-btn, #stop-btn, #speed-2s-btn, #speed-3s-btn { 
+        position: absolute; 
+        top: 400px; 
+    }   
+    #stop-btn { 
+        left: 100px; 
+    } 
+    #start-btn { 
+        left: 150px; 
+    } 
+    #speed-2s-btn { 
+        left: 300px; 
+    } 
+    #speed-3s-btn { 
+        left: 400px; 
+    } 
+    #palm { 
+        left: 675px; 
+        border: 2px solid black;
+        top: 250px;
+    }
+    #output-div{
+        position: absolute;
+        left: 50px;
+        top: 80px;
+        font-size: 5rem;
+
+    }
+    </style>
+</body>
+</html>

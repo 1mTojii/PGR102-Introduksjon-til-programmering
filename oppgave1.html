@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby vil ha...</title>
+    <style>
+        /*IKKE LOV Å ENDRE CSS!*/
+        #container{ position: relative; width: 800px; height: 550px; border: 1px solid rgb(30, 30, 30); margin: auto;}
+        img{position: absolute;}
+        .syot{height: 150px;}
+        #jlpb{ bottom: 0; left: 300px;}
+        #inp{position: absolute; left: 250px;}
+        span, input, button{font-size: 1.3rem;}
+        /*IKKE LOV Å ENDRE CSS!*/
+    </style>
+</head>
+<body>    
+
+    <!-- IKKE LOV Å ENDRE NOE SOM HELST AV DENNE HTML'en! -->
+    <div id="container">        
+        <img id="jlpb" src="images/jlpb.png"/>
+        <img id="tac-x" src="images/cat.png" class="syot">
+        <img id="eddap-x" src="images/eskilpadde.png" class="syot">
+        <img id="gnidliub-x" src="images/building-2.png" class="syot">
+        <div id="inp">
+            <input id="gft-txt" type="text" placeholder="Hva vil du gi babyen?">
+            <button id="give-gft-btn">Gi babyen det i tekstboksen</button> 
+            <br>
+            <span id="llatna-x">Antall ting igjen å gi babyen: 3</span>
+        </div>                
+    </div>
+    <!-- IKKE LOV Å ENDRE NOE SOM HELST AV DENNE HTML'en! -->
+
+
+
+    <script>// HER SKAL DU/DERE KODE JAVASCRIPT (IKKE I EKSTERN FIL)!
+
+        // bottom brukes for vertikal flytting - ref. JS for å stilsette elementer
+        //dette er alle variablene som blir brukt i oppgaven
+        const babyImg = document.getElementById("jlpb");
+        const catImg = document.getElementById("tac-x");
+        const turtleImg = document.getElementById("eddap-x");
+        const buildingImg = document.getElementById("gnidliub-x");
+        const inputTxt = document.getElementById("gft-txt");
+        const giveBtn = document.getElementById("give-gft-btn");
+        const txtBox = document.getElementById("llatna-x");
+
+        giveBtn.onclick = giveBaby;
+        const correctAnswers = ["skilpadde", "katt", "hus"];
+        let answered = []
+        let counter = 3;
+
+        //denne funksjonen filtrerer om ordet er en av de 3 utvalgte ordene. hvis ikke får du en alert ellers gir du gaven til babien
+        //og hvis du allerede har gitt gaven så får du en alert
+        function giveBaby(){
+            const inputTxtValue = inputTxt.value.toLowerCase();
+            const filterAnswer = correctAnswers.filter((answer) => answer === inputTxtValue);
+
+            if (filterAnswer.length > 0) {
+                const alreadyAnswered = answered.filter((answer) => answer === inputTxtValue);
+
+                if (alreadyAnswered.length === 0) {
+                    answered.push(inputTxtValue);
+                    counter--;
+                    txtBox.innerHTML = `Antall ting igjen å gi babyen: ${counter}!`;
+                    moveImgs(inputTxtValue);
+                } else {
+                    alert(`${inputTxtValue} er allerede gitt som gave:)`);
+                    console.log(answered);
+                }
+            } else {
+                alert(`${inputTxtValue} er ikke blant de tre gavene du kan gi til babyen:)`);
+            }
+            //dette gjør slik at det kommer en message og input text, give button og text box forsvinner nå alle gavene er gitt
+
+            if(counter === 0){
+                const happyBabyH1 = document.createElement("div")
+                happyBabyH1.textContent = "Babyen er meget fornøyd med de 3 gavene! :)";
+                happyBabyH1.style.width = "300px";
+                happyBabyH1.style.height = "150px";
+                happyBabyH1.style.zIndex = "10";
+                happyBabyH1.style.position = "absolute";
+                happyBabyH1.style.top = "5%";
+                happyBabyH1.style.right = "35%";
+                happyBabyH1.style.fontSize = "40px";
+                happyBabyH1.style.color = "red";
+                document.body.appendChild(happyBabyH1);
+
+                inputTxt.remove();
+                giveBtn.remove();
+                txtBox.remove();
+            }
+        }
+        //denne funksjonen gjør at gavene beveger seg nå de blir åutta i input feltet
+
+        function moveImgs(inputTxtValue){
+            if(inputTxtValue === "katt"){
+                catImg.style.left = "400px";
+                catImg.style.bottom = "0px"
+            } else if(inputTxtValue === "hus"){
+                buildingImg.style.left = "550px"
+                buildingImg.style.bottom ="0px"
+            } else if(inputTxtValue === "skilpadde"){
+                turtleImg.style.left ="150px"
+                turtleImg.style.bottom = "0px"
+            }   
+        }
+    </script>
+</body>
+</html>

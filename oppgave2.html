@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oppgave 2</title>
+</head>
+<body>
+
+    <div>
+
+        <!--  LEGG TIL HTML-koden som trengs for å løse oppgaven! -->
+        <h3>Legg til filmer</h3>
+    
+
+    <label>Tittel</label>    
+    <input id="titleTxt" type="text">
+
+    <label>Kategori</label>
+    <input id="categoryTxt" type="text"> <br>
+    <br>
+
+    <span id="movies">Antall filmer i array: 0</span> <br>
+    <br>
+    <span id="errorMessage">Ingen feilmeldinger enda</span> <br>
+    <br>
+
+    <button id="addMovie">Legg til film i array</button>
+    <button id="showMovieArray">Vis filmene som er lagt til i array</button>
+    <div id="array-list"> </div>
+
+    </div>
+
+    <script>// HER SKAL DU KODE JAVASCRIPT (IKKE I EKSTERN FIL)!
+
+        const tittelTxt = document.getElementById("titleTxt");
+        const kategoriTxt = document.getElementById("categoryTxt");
+        const movies = document.getElementById("movies");
+        const feilmelding = document.getElementById("errorMessage");
+        const filmbtn = document.getElementById("addMovie");
+        const visFilmerBtn = document.getElementById("showMovieArray");
+        const arrayList = document.getElementById("array-list");
+
+        
+        let counter = 0;
+        filmbtn.onclick = addMovie;
+        visFilmerBtn.onclick = visFilmer;
+
+        // tomt array for å legge til filmer
+        let moveArray = [];
+
+        function addMovie(){
+            const kategoriTxtValue = kategoriTxt.value;
+            const tittelTxtValue = tittelTxt.value;
+
+            // en skjekk på om begge tekst feltene er fylt ut, vis ikke kommer opp feilmeldingen
+            if(kategoriTxtValue === "" || tittelTxtValue === ""){
+                feilmelding.textContent = "FEIL: Fyll ut både tittel og kategori! Denne feilmeldingne tilbakestilles om 3 sekunder (setTimout)";
+                feilmelding.style.color ="red";
+
+                //setter timmer slik at den orgiale teksten kommer tilbake etter 3 sekunder 
+                setTimeout((addMovie) =>{
+                    feilmelding.textContent = "Ingen feilmedlinger enda.";
+                    feilmelding.style.color ="black";
+                }, 3000) //https/developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout vi fant informasjon om setTimout her.
+
+            } else {
+                // danner et nytt filmobjekt som legges til i arrayet
+                const addNewMovie = {
+                    Tittel: tittelTxtValue,
+                    Kategori: kategoriTxtValue,
+                };
+
+                //pusher elementet som legges inn i addNewMoveis i arrayet
+                moveArray.push(addNewMovie);
+                counter++;
+                movies.innerHTML = `Antall filmer i array: ${counter} `
+
+                //tømmer input-feltene 
+                kategoriTxt.value = "";
+                tittelTxt.value = "";
+            }
+        }
+
+        //funksjonen som viser filmene som ligger i arrayet
+        function visFilmer(){
+            arrayList.innerHTML = "";
+            //ekstra funksjon som sjekker om arrayet er tomt, om det er det får  man opp feilmeldigen under.
+            if(moveArray.length === 0){
+                feilmelding.textContent = "FEIL: Arrayet er tomt, fyll inn tittel og kategori! Denne feilmedlingen tilbakestilles om 3 sekunder (setTimout)";
+                feilmelding.style.color ="red";
+                setTimeout((visFilmer) =>{
+                    feilmelding.textContent = "Ingen feilmedlinger enda.";
+                    feilmelding.style.color ="black";
+                }, 3000)
+            } else {
+
+                //for-loop som går gjennom hele arrayet og endrer deres html 
+                for(let i = 0; i <moveArray.length; i++){
+                    arrayList.innerHTML += `
+                    <h1>  ${moveArray[i].Tittel} <h1/> 
+                    <p> ${moveArray[i].Kategori} <p/>`  
+                }
+            }
+        }
+
+    </script>
+ </body>
+</html>

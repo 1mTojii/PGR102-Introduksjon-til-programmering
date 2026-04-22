@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oppgave 4 - Gruppemedlem 1</title>
+    <!-- LØSES BARE HVIS MAN HAR JOBBET 2 ELLER 3 SAMMEN -->
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        background-color: beige;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .main-container {
+        border: 1px solid black;
+        width: 1366px;
+        height: 768px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .healthbar-container {
+        margin-top: 10px;
+        width: 300px;
+        height: 50px;
+        border: 2px solid black;
+      }
+
+      .text-container p {
+        margin: 0;
+      }
+
+      .img-container {
+        position: absolute;
+      }
+
+      .img-container:hover img {
+        transform: scale(1.1);
+      }
+
+      #fluffy-cat {
+        bottom: 5%;
+        left: 3%;
+      }
+
+      #whiskers {
+        left: 20%;
+        bottom: 5%;
+      }
+
+      .cat {
+        height: 250px;
+      }
+
+      #baby {
+        bottom: 10%;
+        right: 5%;
+      }
+
+      #baby-img {
+        height: 700px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main-container">
+      <div class="cat-health-containers">
+        <div class="healthbar-container">
+          <div id="fluffy-cat-health" class="healthbar"></div>
+          <div class="text-container">
+            <p id="fluffy-cat-name-txt"></p>
+            <p id="fluffy-cat-health-txt"></p>
+          </div>
+        </div>
+        <div class="healthbar-container">
+          <div id="whiskers-health" class="healthbar"></div>
+          <div class="text-container">
+            <p id="whiskers-name-txt"></p>
+            <p id="whiskers-health-txt"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="baby-health-container">
+        <div class="healthbar-container">
+          <div id="baby-health" class="healthbar"></div>
+          <div class="text-container">
+            <p id="baby-name-txt"></p>
+            <p id="baby-health-txt"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="fluffy-cat" class="img-container">
+        <img class="cat" src="images/cat.png" alt="fluffy-cat" />
+      </div>
+      <div id="whiskers" class="img-container">
+        <img class="cat" src="images/cat.jpg" alt="whiskers" />
+      </div>
+      <div id="baby" class="img-container">
+        <img id="baby-img" src="images/jlpb.png" alt="baby" />
+      </div>
+    </div>
+
+    <script>
+      // Stats for katter og babyen
+      let catsArray = [
+        {
+          id: 0,
+          name: "fluffy",
+          maxHP: 300,
+          currentHP: 300,
+          damage: 200,
+          alive: true,
+        },
+        {
+          id: 1,
+          name: "whiskers",
+          maxHP: 400,
+          currentHP: 400,
+          damage: 150,
+          alive: true,
+        },
+      ];
+
+      let babyStats = {
+        name: "baby",
+        maxHP: 2000,
+        currentHP: 2000,
+        damage: 100,
+        alive: true,
+      };
+      //Bilder som er interaktive
+      const fluffyCat = document.getElementById("fluffy-cat");
+      const whiskers = document.getElementById("whiskers");
+
+      const baby = document.getElementById("baby");
+
+      //Navnene til kattene og babyen som kan oppdateres 
+      const fluffyCatName = document.getElementById("fluffy-cat-name-txt");
+      const whiskersName = document.getElementById("whiskers-name-txt");
+
+      const babyName = document.getElementById("baby-name-txt");
+
+      //HP-tekstene til kattene som skal kunne oppdateres
+      const fluffyCatHealthTxt = document.getElementById("fluffy-cat-health");
+      const whiskersHealthTxt = document.getElementById("whiskers-health-txt");
+
+      //HP-teksten til babyen som kan oppdatere seg
+      const babyHealthTxt = document.getElementById("baby-health-txt");
+
+      //Healthbars som må oppdateres for at grønnfargen skal bli mindre når HP blir mindre (tilleggsfunksjonalitet)
+      const fluffyCatHealthBar = document.getElementById("fluffy-cat-health");
+      const whiskersHealthBar = document.getElementById("whiskers-health-txt");
+      const babyHealthBar = document.getElementById("baby-health");
+
+
+// Hp bar text med current og max hp til kattene og babyen
+      fluffyCatHealthTxt.innerHTML = `${catsArray[0].currentHP} / ${catsArray[0].maxHP}` ;
+      whiskersHealthTxt.innerHTML = `${catsArray[1].currentHP} / ${catsArray[1].maxHP}`;
+      babyHealthTxt.innerHTML = `${babyStats.currentHP} / ${babyStats.maxHP}`;
+      fluffyCatName.innerHTML = `${catsArray[0].name}`;
+      whiskersName.innerHTML = `${catsArray[1].name}`;
+      babyName.innerHTML = `${babyStats.name}`;
+
+//funksjonen som gjør at katten angriper når den er trykket på
+      function catsAttack(cat) {
+        if (babyStats.alive) {
+          babyStats.currentHP -= cat.damage;
+          alert(`${cat.name} har gjort ${cat.damage} skade på ${babyStats.name}!`);
+          if (babyStats.currentHP <= 0) {
+            babyStats.alive = false;
+            babyStats.currentHP = 0;
+            updateBabyHealth();
+            gameWon();
+          } else {
+            updateBabyHealth();
+            babyAttack();
+          }
+        }
+      }
+
+// funksjonen gjør at babien sin health blir oppdatert når angrepet skjer
+      function updateBabyHealth() {
+        document.getElementById(
+          "baby-health-txt"
+        ).innerText = `HP: ${babyStats.currentHP}/${babyStats.maxHP}`;
+      }
+// når katten angriper skal babien angripe rett etter og gjøre skade på en randome katt 
+      function babyAttack() {
+        let randomCat;
+        do {
+          randomCat = Math.floor(Math.random() * catsArray.length);
+        } while (catsArray[randomCat].alive === false);
+
+        catsArray[randomCat].currentHP -= babyStats.damage;
+        alert(
+          `${babyStats.name} har gjort ${babyStats.damage} skade på ${catsArray[randomCat].name}!`
+        );
+
+        updateCatsHealth(); 
+        }
+//denne funksjonen gjør at katten sitt liv blir oppdatert rett etter at skade blir utført og deretter skjekker om katten er dø 
+//hvis katten er dø blir katten fjernet og spillet er tapt
+      function updateCatsHealth() {
+        document.getElementById(
+          "fluffy-cat-health-txt"
+        ).innerText = `HP: ${catsArray[0].currentHP}/${catsArray[0].maxHP}`;
+        document.getElementById(
+          "whiskers-health-txt"
+        ).innerText = `HP: ${catsArray[1].currentHP}/${catsArray[1].maxHP}`;
+        removeDeadCat();
+      }
+      //fjerner katten hvis den er dø 
+    function removeDeadCat() {
+        if (catsArray[0].currentHP <= 0 && catsArray[0].alive) {
+            catsArray[0].alive = false;
+            fluffyCat.remove();
+        }
+        if (catsArray[1].currentHP <= 0 && catsArray[1].alive) {
+            catsArray[1].alive = false;
+            whiskers.remove();
+        }
+        }
+//hvis babien er dø så har kattene vunnet
+      function gameWon() {
+        alert("Kattene vant!");
+      }
+
+      document.getElementById("fluffy-cat").onclick = function () {
+        catsAttack(catsArray[0]);
+      };
+      document.getElementById("whiskers").onclick = function () {
+        catsAttack(catsArray[1]);
+      };
+
+      //dette er en modifisert versjon av arbeidskravet vårt. Jeg har brukt elementer fra css og html fra arbeidskravet.
+      //flere av funskjonene har blit endret får å tilpasse oppgaven og noen funksjoner fikk vi absolutt ikke til å fungere.
+      //funksjonen som gamelost fikk vi ikke til å funke siden alerten ville ikke dukke opp når kattene ble borte.
+      //kilder: w3schools og arbeidskravet.
+</script>
+</body>
+</html>
